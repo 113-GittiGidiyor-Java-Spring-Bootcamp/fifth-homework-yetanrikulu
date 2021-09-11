@@ -19,5 +19,15 @@ public class PermanentInstructor extends Instructor {
         setPhoneNumber(phoneNumber);
         setFixedSalary(fixedSalary);
     }
+    @Override
+    public double getSalary(){
+        return this.fixedSalary;
+    }
+    @Override
+    public double calculateNewSalary(double percent){
+        this.fixedSalary = this.fixedSalary * (1+(percent/100));
+        return this.fixedSalary;
+    }
+
 }
 

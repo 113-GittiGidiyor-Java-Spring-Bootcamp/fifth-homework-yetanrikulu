@@ -28,5 +28,15 @@ public class Instructor extends Person {
     @OneToMany(mappedBy = "instructor", cascade = {
             CascadeType.ALL})
     private List<Course> courseList = new ArrayList<>();
+
+    public double getSalary(){
+        return 0;
+    }
+
+    public double calculateNewSalary(double percent){
+        return 0;
+    }
+
+
 }
 

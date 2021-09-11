@@ -2,13 +2,18 @@ package com.example.fifthhomeworkyetanrikulu.service;
 
 import com.example.fifthhomeworkyetanrikulu.dto.InstructorDTO;
 import com.example.fifthhomeworkyetanrikulu.entity.Instructor;
+import com.example.fifthhomeworkyetanrikulu.entity.SalaryChangeTransaction;
 import com.example.fifthhomeworkyetanrikulu.exception.InstructorIsAlreadyExistException;
 import com.example.fifthhomeworkyetanrikulu.mapper.GlobalMapper;
 import com.example.fifthhomeworkyetanrikulu.repository.InstructorRepository;
-import io.swagger.models.auth.In;
+import com.example.fifthhomeworkyetanrikulu.repository.SalaryChangeTransactionRepository;
+import com.example.fifthhomeworkyetanrikulu.util.DateFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +23,7 @@ public class InstructorService {
 
     private final InstructorRepository instructorRepository;
     private final GlobalMapper globalMapper;
+    private final SalaryChangeTransactionRepository salaryChangeTransactionRepository;
 
 
     public List<Instructor> findAll() {
@@ -32,18 +38,18 @@ public class InstructorService {
 
     public Instructor save(InstructorDTO instructorDTO) {
 
-        if (instructorRepository.existsByPhoneNumber(instructorDTO.getPhoneNumber())){
+        if (instructorRepository.existsByPhoneNumber(instructorDTO.getPhoneNumber())) {
             throw new InstructorIsAlreadyExistException();
         }
 
         Instructor instructor = null;
-        if (instructorDTO.getType().equals("PermanentInstructor")){
+        if (instructorDTO.getType().equals("PermanentInstructor")) {
             instructor = globalMapper.mapToPermanent(instructorDTO);
         }
-        if (instructorDTO.getType().equals("VisitingResearcher")){
+        if (instructorDTO.getType().equals("VisitingResearcher")) {
             instructor = globalMapper.mapToVisiting(instructorDTO);
         }
-        return instructor==null? null:instructorRepository.save(instructor);
+        return instructor == null ? null : instructorRepository.save(instructor);
     }
 
     public Instructor update(InstructorDTO instructorDTO) {
@@ -65,6 +71,33 @@ public class InstructorService {
 
     public void deleteByName(String name) {
         instructorRepository.deleteInstructorByName(name);
+    }
+
+
+    public Instructor changeSalary(long id, double percent, HttpServletRequest request) {
+
+        Instructor instructor = findById(id);
+
+        SalaryChangeTransaction salaryChangeTransaction = new SalaryChangeTransaction();
+        salaryChangeTransaction.setInstructorId(instructor.getId());
+        salaryChangeTransaction.setClient(request.getRemoteAddr());
+        salaryChangeTransaction.setPreviousSalary(instructor.getSalary());
+        instructor.calculateNewSalary(percent);
+        salaryChangeTransaction.setNewSalary(instructor.getSalary());
+        salaryChangeTransaction.setChangePercent(percent);
+        salaryChangeTransaction.setTime(LocalDate.now());
+
+        salaryChangeTransactionRepository.save(salaryChangeTransaction);
+
+        return instructor;
+    }
+
+    public List<SalaryChangeTransaction> findSalaryChangesByInstructorId(long id) {
+        return salaryChangeTransactionRepository.findByInstructorId(id);
+    }
+    public List<SalaryChangeTransaction> findSalaryChangesByDate(String date) {
+        LocalDate localDate = DateFormatter.convertStringToLocalDate(date);
+        return salaryChangeTransactionRepository.findByTimeAfter(localDate);
     }
 
 }

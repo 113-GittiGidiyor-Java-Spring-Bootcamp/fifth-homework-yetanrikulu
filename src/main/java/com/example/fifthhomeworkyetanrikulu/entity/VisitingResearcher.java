@@ -19,6 +19,15 @@ public class VisitingResearcher extends Instructor {
         setPhoneNumber(phoneNumber);
         setHourlySalary(hourlySalary);
     }
+    @Override
+    public double getSalary(){
+        return this.hourlySalary;
+    }
+    @Override
+    public double calculateNewSalary(double percent){
+        this.hourlySalary = this.hourlySalary * (1+(percent/100));
+        return this.hourlySalary;
+    }
 
 }
 
