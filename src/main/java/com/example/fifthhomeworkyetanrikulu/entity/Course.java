@@ -35,4 +35,12 @@ public class Course extends AbstractBaseEntity {
         this.courseCode = courseCode;
         this.creditScore = creditScore;
     }
+    public Course(String courseName, String courseCode, int creditScore,List<Student> studentList) {
+        this.courseName = courseName;
+        this.courseCode = courseCode;
+        this.creditScore = creditScore;
+        this.studentList = studentList;
+    }
+
+
 }
