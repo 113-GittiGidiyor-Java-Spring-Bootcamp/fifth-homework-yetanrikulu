@@ -1,4 +1,4 @@
-##### Only unit test of course controller and course services is available because of the time limitation.
+##### Only unit test of course controller and course services are available because of the time limitation.
 
 # Beşinci hafta ödevi teslim tarihi : 14 Eylül Salı - Saat 23:00
 
