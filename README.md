@@ -1,3 +1,5 @@
+##### Only unit test of course controller and course services is available because of the time limitation.
+
 # Beşinci hafta ödevi teslim tarihi : 14 Eylül Salı - Saat 23:00
 
 ![hm05](https://user-images.githubusercontent.com/45206582/132606840-bcc89ab7-37f4-4bbd-a950-227b838b0b3c.PNG)
@@ -13,6 +15,7 @@
 * Whole Instructors, Courses and Students can be listed.
 * Instructors, Courses and Students can be deleted by using id or object information.
 * Instructors, Courses and Students can be updated using object information.
+* Salary of Instructors can be updated by id.
 * Exceptions can be listed.
 * Date Format should be YYYY-MM-DD.
 ---
